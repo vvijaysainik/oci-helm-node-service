@@ -16,6 +16,7 @@ env:
   # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
   exportedVariables:
     - BUILDRUN_HASH
+    - HELM_VERSION
 
 steps:
   - type: Command
@@ -24,6 +25,13 @@ steps:
     command: |
       export BUILDRUN_HASH=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
       echo "BUILDRUN_HASH: " $BUILDRUN_HASH
+
+  - type: Command
+    name: "Define unique version for Helm"
+    timeoutInSeconds: 40
+    command: |
+      export HELM_VERSION=`echo 0.1.0-${BUILDRUN_HASH}`
+      echo "HELM_VERSION: " $HELM_VERSION
 
   - type: Command
     timeoutInSeconds: 600
